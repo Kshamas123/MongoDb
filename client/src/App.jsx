@@ -1,15 +1,17 @@
-import { useState } from 'react'
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
-import './App.css'
+import Begintextpage from './components/BegintextPage'; // your target page
 
 function App() {
-
-
   return (
-    <>
-    <Login/>       
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/beginpage" element={<Begintextpage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

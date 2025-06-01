@@ -1,36 +1,42 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 function Login() {
     const [email,setmail]=useState('');
     const [lpassword,setlpassword]=useState('');
-
-     const handlesubmit=async(e)=> {
-    e.preventDefault();
-    console.log(email, lpassword);
-    try {
+  const navigate=useNavigate()
+   const handlesubmit = async (e) => {
+  e.preventDefault();
+  console.log(email, lpassword);
+  try {
     const response = await fetch('http://localhost:5000/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email:email,
-        password:lpassword
+        email: email,
+        password: lpassword,
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Success:', data);
+      navigate('/beginpage');
+    } else {
+      const errorData = await response.json();
+      console.error('Signup failed:', errorData);
+      alert('Signup failed: ' + (errorData.message || 'Unknown error'));
     }
-
-    const data = await response.json();
-    console.log('Success:', data);
   } catch (error) {
     console.error('Error:', error);
+    alert('Network or server error');
   }
-  }
+};
+
   return (
     <Form onSubmit={handlesubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
