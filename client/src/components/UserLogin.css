@@ -1,0 +1,80 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import './LoginPage.css'; // Reusing same CSS
+
+function UserLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      alert('Please enter both email and password');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert('Login successful!');
+        navigate('/beginpage');
+      } else {
+        const errorData = await response.json();
+        alert('Login failed: ' + (errorData.message || 'Unknown error'));
+      }
+    } catch (error) {
+      alert('Network or server error');
+    }
+  };
+
+  return (
+    <div className="login-wrapper">
+      <Form onSubmit={handleLogin} className="login-form animated-border">
+        <h2 className="form-title animated-text">User Login</h2>
+
+        <Form.Group className="mb-3" controlId="formUserEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="glitch-input pulse"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formUserPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="glitch-input pulse"
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit" className="glitch-button wave">
+          Login
+        </Button>
+
+        <div className="mt-3 text-center">
+          <span>Don't have an account? </span>
+          <Link to="/signup" className="signup-link">Sign up</Link>
+        </div>
+      </Form>
+    </div>
+  );
+}
+
+export default UserLogin;

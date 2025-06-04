@@ -1,25 +1,31 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import './LoginPage.css'
+import './LoginPage.css'; // Reuse your styles
 
-function Login() {
-  const [email, setmail] = useState('');
-  const [lpassword, setlpassword] = useState('');
+function Login() {  // Signup page (named Login.jsx but used for Signup)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert('Please fill in all fields!');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: lpassword }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
-        const data = await response.json();
+        // Signup successful, redirect to begin page or login page
         navigate('/beginpage');
       } else {
         const errorData = await response.json();
@@ -32,8 +38,8 @@ function Login() {
 
   return (
     <div className="login-wrapper">
-      <Form onSubmit={handlesubmit} className="login-form">
-        <h2 className="form-title">Login</h2>
+      <Form onSubmit={handleSubmit} className="login-form">
+        <h2 className="form-title">Sign Up</h2>
 
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
@@ -41,12 +47,9 @@ function Login() {
             type="email"
             placeholder="Enter email"
             value={email}
-            onChange={(e) => setmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             className="glitch-input"
           />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -54,8 +57,8 @@ function Login() {
           <Form.Control
             type="password"
             placeholder="Password"
-            value={lpassword}
-            onChange={(e) => setlpassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="glitch-input"
           />
         </Form.Group>
@@ -63,6 +66,13 @@ function Login() {
         <Button variant="primary" type="submit" className="glitch-button">
           Submit
         </Button>
+
+        <p style={{ marginTop: '20px', color: '#ccc' }}>
+          Already have an account?{' '}
+          <Link to="/userlogin" style={{ color: '#00E6F6', textDecoration: 'underline' }}>
+            Login
+          </Link>
+        </p>
       </Form>
     </div>
   );

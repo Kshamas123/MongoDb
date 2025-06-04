@@ -1,0 +1,63 @@
+/* Center and contain the form */
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #0d1117;
+  padding: 20px;
+}
+
+/* Style the form */
+.styled-form {
+  max-width: 400px;
+  width: 100%;
+  background-color: #161b22;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(253, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Style labels */
+.styled-form .form-label {
+  color: #00e6f6;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Style input field */
+.styled-form .form-control {
+  background: #0d1117;
+  border: 1px solid #00e6f6;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.styled-form .form-control:focus {
+  border-color: #ff013c;
+  box-shadow: 0 0 6px #ff013c;
+  background-color: #111;
+  color: #fff;
+}
+
+/* Style button */
+.glitch-button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  font-size: 1.1rem;
+  background-color: #00e6f6;
+  border: none;
+  color: #000;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.glitch-button:hover {
+  background-color: #ff013c;
+  color: white;
+}
+

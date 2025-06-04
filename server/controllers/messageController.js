@@ -1,5 +1,6 @@
 const Message = require('../models/Message');
 
+// For sender
 const storeMessage = async (req, res) => {
   const { passkey, message } = req.body;
 
@@ -8,11 +9,10 @@ const storeMessage = async (req, res) => {
   }
 
   try {
-    // Find the existing message by passkey and update it, or create a new one if not found
     const updatedMessage = await Message.findOneAndUpdate(
-      { passkey },           // filter
-      { message },           // update
-      { new: true, upsert: true }  // options: return new doc & create if doesn't exist
+      { passkey },
+      { message },
+      { new: true, upsert: true }
     );
 
     res.status(201).json({ success: true, message: "Message stored successfully", data: updatedMessage });
@@ -22,5 +22,32 @@ const storeMessage = async (req, res) => {
   }
 };
 
-module.exports = { storeMessage };
+// For receiver
+const fetchMessage = async (req, res) => {
+  let { passkey } = req.body;
 
+  if (!passkey) {
+    return res.status(400).json({ error: "Passkey is required" });
+  }
+
+  passkey = passkey.trim(); // Clean up the input
+
+  try {
+    const foundMessage = await Message.findOne({ passkey });
+
+    if (!foundMessage) {
+      return res.status(404).json({ success: false, message: "Invalid passkey or message not found" });
+    }
+
+    res.status(200).json({ success: true, message: foundMessage.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// ✅ EXPORT THE FUNCTIONS
+module.exports = {
+  storeMessage,
+  fetchMessage,
+};
